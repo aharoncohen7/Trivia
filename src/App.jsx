@@ -5,6 +5,113 @@ import { CiStar } from "react-icons/ci";
 import { FaStar } from "react-icons/fa";
 import { useTriviaStore } from './stors';
 
+const App = () => {
+  // const user = useTriviaStore(state=>state.user);
+  const fetchQuestions = useTriviaStore(state=>state.fetchQuestions);
+  const questions = useTriviaStore(state=>state.questions);
+  const loading = useTriviaStore(state=>state.loading);
+  const isFavorite = useTriviaStore(state=>state.isFavorite);
+  
+  const favorites = useTriviaStore(state=>state.favorites);
+  const addFavorite = useTriviaStore(state=>state.addFavorite);
+  const removeFavorite = useTriviaStore(state=>state.removeFavorite);
+  console.log(questions)
+
+
+  // const [questions, setQuestions] = useState([])
+  // const [loading, setLoading] = useState([])
+  // const [counter, setCounter] = useState(0)
+  // const [favorites, setFavorites] = useState([])
+  // console.log(formatQuestions(questions));
+  
+
+  // function updateFavorites(index, object) {
+  //   console.log(index);
+  //  setFavorites(prev=>{
+  //   const newArray = [...prev];
+  //   newArray.splice(index, 0, object);
+  //   console.log(newArray);
+  //   return newArray;
+  //  })
+  // }
+  
+    function updateFavorites(object) {
+      if(isFavorite(object)){
+        removeFavorite(object)
+      }
+      else{
+        addFavorite(object)
+      }
+      console.log(favorites);
+    }
+  
+  
+  
+  // const getQuestions = async () => {
+  //   setLoading(true);
+  //   try {
+  //     //  await new Promise(resolve => setTimeout(resolve, 5000))
+  //     const result = await axios.get('https://opentdb.com/api.php?amount=9')
+  //       .then(({ data }) => setQuestions(formatQuestions(data.results)))
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  //   setLoading(false)
+  // }
+
+  useEffect(() => {
+    // getQuestions()
+    fetchQuestions()
+  }, [])
+
+
+  // const handleClick = () => {
+  //   setCounter(counter + 1)
+  // }
+
+
+  return (
+    <div>
+      <Header />
+      <main>
+        <section>
+          {/* <span>{counter}</span> */}
+          <div className={`${loading ? "animate-pulse" : " "} grid gap-4 grid-cols-1 md:grid-cols-3 py-8 px-48`}>
+      
+            {questions?.map((question, i) => (
+              <article key={question.question} className='border border-green-300 p-4 rounded-xl shadow-xl'>
+                <span className='flex justify-between font-bold'><h2 >{convert(question.question)}</h2>
+                {
+                isFavorite(convert(question.question))
+                ?<FaStar color='gold'
+                onClick={()=>{updateFavorites(convert(question.question))}}
+                /> : <CiStar  
+                // onClick={()=>{updateFavorites(i, question)}}
+                onClick={()=>{updateFavorites(convert(question.question))}}
+                />}</span>
+                <span className='flex flex-col gap-4  items-start'>
+                  {question.answers.map((answer) => {
+                    return <button
+                      // onClick={() => { if (answer.isCorrect) handleClick() }}
+                      className={` ${answer.isCorrect ? 'text-green-600' : "text-red-400"}`} key={answer.answer}>
+                        {convert(answer.answer)}</button>
+                  })}
+
+                </span>
+              </article>
+            ))}
+          </div>
+        </section>
+        <button className='p-4 bg-green-800 rounded-md' onClick={fetchQuestions}>new questions</button>
+      </main>
+    </div>
+  )
+}
+
+export default App
+
+
+
 const convert = (str) => {
   const txt = document.createElement("textarea")
   txt.innerHTML = str;
@@ -52,101 +159,3 @@ function formatQuestions(questions) {
   });
   return formattedQuestions;
 }
-
-// Example originalQuestions array
-const originalQuestions = [
-  // Your array of questions here
-];
-
-
-
-
-
-
-
-
-
-
-
-
-const App = () => {
-  const [questions, setQuestions] = useState([])
-
-  const [loading, setLoading] = useState([])
-  const [counter, setCounter] = useState(0)
-  const [favorites, setFavorites] = useState([])
-  console.log(questions)
-  // console.log(formatQuestions(questions));
-  
-   const user = useTriviaStore(state=>state.user)
-
-
-
-
-
-  function updateFavorites(index, object) {
-    console.log(index);
-   setFavorites(prev=>{
-    const newArray = [...prev];
-    newArray.splice(index, 0, object);
-    console.log(newArray);
-    return newArray;
-   })
-  }
-  
-  
-  
-  const getQuestions = async () => {
-    setLoading(true);
-    try {
-      //  await new Promise(resolve => setTimeout(resolve, 5000))
-      const result = await axios.get('https://opentdb.com/api.php?amount=9')
-        .then(({ data }) => setQuestions(formatQuestions(data.results)))
-    } catch (error) {
-      console.error(error);
-    }
-    setLoading(false)
-  }
-
-  useEffect(() => {
-    getQuestions()
-  }, [])
-
-
-  const handleClick = () => {
-    setCounter(counter + 1)
-  }
-
-
-  return (
-    <div>
-      <Header />
-      <main>
-        <section>
-          <h1>Questions</h1>
-          <span>{counter}</span>
-          <div className={`${loading ? "animate-pulse" : " "} grid gap-4 grid-cols-1 md:grid-cols-3 xl:grid-cols-4 px-2`}>
-      
-            {questions.map((question, i) => (
-              <article key={question.question} className='border border-green-300 p-4 rounded-xl shadow-xl'>
-                <span className='flex justify-between'><h2 >{convert(question.question)}</h2>
-                {favorites[i]?<FaStar color='gold' /> : <CiStar  onClick={()=>{updateFavorites(i, question)}}/>}</span>
-                <span className='flex flex-col gap-4 border border-blue-500'>
-                  {question.answers.map((answer) => {
-                    return <button
-                      onClick={() => { if (answer.isCorrect) handleClick() }}
-                      className={`border border-red-500 ${answer.isCorrect ? 'text-green-600' : "text-red-400"}`} key={answer.answer}>
-                        {convert(answer.answer)}</button>
-                  })}
-
-                </span>
-              </article>
-            ))}
-          </div>
-        </section>
-      </main>
-    </div>
-  )
-}
-
-export default App
