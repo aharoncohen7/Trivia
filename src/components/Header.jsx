@@ -1,28 +1,52 @@
 import React, { useState } from 'react'
+import { MdDarkMode } from "react-icons/md";
+import { MdOutlineLightMode } from "react-icons/md";
+import { useTriviaStore } from '../stores';
+import { NavLink } from 'react-router-dom';
 
 const Header = () => {
-    const [color, setColor]= useState("text-blue-800")
+    const darkMode = useTriviaStore(state => state.darkMode);
+    const setPrimaryColor = useTriviaStore(state => state.setPrimaryColor);
+    const primaryColor = useTriviaStore(state => state.primaryColor);
+    const setDarkMode = useTriviaStore(state => state.setDarkMode);
+    const user = useTriviaStore(state => state.user)
+
+
     const links = [
-        { id: 1, name: 'Home', href: '/' },
-        { id: 2, name: 'About', href: '/about' },
-        { id: 3, name: 'Contact', href: '/contact' },
+        { id: 1, name: 'Home', href: '/home' },
+        { id: 2, name: 'Favorites', href: '/favorites' },
+        { id: 3, name: 'Play', href: '/play' },
+        { id: 4, name: 'About', href: '/about' },
+        { id: 5, name: 'Contact', href: '/contact' },
     ]
 
 
     return (
-        <header className='h-16 bg-white-700 text-white flex justify-center items-center shadow-md'>
-            <span  className={`${color} font-bold text-2xl p-3`}>Tri<span  className='text-black'>via</span></span>
+        <header className={`h-16 ${darkMode ? 'bg-black text-white' : 'bg-white-700 text-black'} flex justify-center items-center shadow-md`}>
+            <span style={{ color: primaryColor }} className='font-bold text-2xl p-3'>Tri<span className={darkMode ? 'text-white' : 'text-black'}>via</span></span>
             <div className='container h-full mx-auto flex items-center justify-between'>
                 <nav>
-                    <ul className='flex gap-4'>
-                        {links.map((link) => 
-                            <li key={link.id}>
-                                <a className='font-semibold text-black hover:text-yellow-300' href={link.href}>{link.name}</a>
-                            </li>
+                    <ul className='flex gap-6 p-8'>
+                        {links.map((link) =>
+                            <NavLink to={link.href}> 
+                                <li my-color={primaryColor} className={`links font-semibold hover:text-blue-300 h-full`} key={link.id}>
+                                {link.name}
+
+                            </li></NavLink>
                         )}
                     </ul>
                 </nav>
             </div>
+            <span className='w-56 flex items-center justify-center '>
+                <div>{`${user.name}`}</div>
+                <input className='border border-slate-300 m-4' type="color" value={primaryColor} onChange={(e) => {
+                    console.log(e.target.value)
+                    setPrimaryColor(e.target.value)
+                }} />
+
+                {darkMode ? <MdOutlineLightMode size={30} onClick={setDarkMode} /> : <MdDarkMode onClick={setDarkMode} size={30} />}
+
+            </span>
         </header>
     )
 }
