@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { MdDarkMode } from "react-icons/md";
 import { MdOutlineLightMode } from "react-icons/md";
 import { useTriviaStore } from '../stores';
@@ -20,6 +20,21 @@ const Header = () => {
         { id: 5, name: 'Contact', href: '/contact' },
     ]
 
+    useEffect(()=>{
+        const elements = document.getElementsByTagName("li")
+        for (const element of elements) {
+            element.style.color = darkMode? "white": "black";
+          }
+    },[darkMode] )
+
+    const changeColor = (e)=>{
+        e.target.style.color = primaryColor;
+    }
+    const changeColorBack = (e)=>{
+        e.target.style.color =darkMode? "white": "black"
+    }
+        
+
 
     return (
         <header className={`h-16 ${darkMode ? 'bg-black text-white' : 'bg-white-700 text-black'} flex justify-center items-center shadow-md`}>
@@ -27,9 +42,14 @@ const Header = () => {
             <div className='container h-full mx-auto flex items-center justify-between'>
                 <nav>
                     <ul className='flex gap-6 p-8'>
-                        {links.map((link) =>
-                            <NavLink to={link.href}> 
-                                <li my-color={primaryColor} className={`links font-semibold hover:text-blue-300 h-full`} key={link.id}>
+                        {links.map((link, i) =>
+                            <NavLink key={i} to={link.href}> 
+                                <li
+                                name="link"
+                                my-color={primaryColor} 
+                                onMouseOver={changeColor}
+                                onMouseOut={changeColorBack}
+                                className={`links font-semibold hover:text-blue-300 h-full`} key={link.id}>
                                 {link.name}
 
                             </li></NavLink>

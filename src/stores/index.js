@@ -4,6 +4,10 @@ import axios from "axios";
 
 export const useTriviaStore = create((set, get) => ({
     user: {},
+    answers: 0,
+    setAnswers: (answers) => set({ answers }),
+    correct_answers: 0,
+    setCorrect_Answers: (correct_answers) => set({ correct_answers }),
     questions: [],
     favorites: [],
     loading: false,
@@ -11,6 +15,10 @@ export const useTriviaStore = create((set, get) => ({
     primaryColor: '#1c18dc',
     darkMode: false,
     setLoading: (loading) => set({ loading }),
+    endGame:(correct_answers)=> {
+      set(state => ({ answers: state.answers + 9, }))
+      set(state => ({ correct_answers: state.correct_answers + correct_answers }))
+    },
     setError: (error) => set({ error }),
     setUser: (user) => set({ user }),
     setQuestions: (questions) => set({ questions }),

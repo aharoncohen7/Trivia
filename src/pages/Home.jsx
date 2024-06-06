@@ -35,6 +35,7 @@ const Home = () => {
 
     // עדכון מועדפים
     function updateFavorites(question) {
+        console.log(question.split(" :: ")[0])
         if (isFavorite(question)) {
             removeFavorite(question)
         }
@@ -51,26 +52,29 @@ const Home = () => {
     return (
         <div>
             <main>
-
+            {loading &&<div className='fixed h-screen w-full flex justify-center items-center ' > <div style={{borderLeftColor: primaryColor}} class="spinner"></div></div>}
                 <section>
                     <span className='flex '>
-
                     </span>
                     <div className={`${loading ? "animate-pulse" : " "} grid gap-4 grid-cols-1 md:grid-cols-3 py-8 px-48`}>
+                    
                     <button style={{ backgroundColor: primaryColor }} className='p-4 rounded-md' onClick={fetchQuestions}>🔃 Refresh</button>
-                        <NavLink to={"favorites"}><button style={{ backgroundColor: primaryColor }} className='w-full p-4 rounded-md' >Go to my favorites ➡️ </button></NavLink>
-                        <NavLink to={"play"}><button style={{ backgroundColor: primaryColor }} className='w-full p-4 rounded-md'>Play ▶️</button></NavLink>
+                        <NavLink to={"/favorites"}><button style={{ backgroundColor: primaryColor }} className='w-full p-4 rounded-md' >Go to my favorites ➡️ </button></NavLink>
+                        <NavLink to={"/play"}><button style={{ backgroundColor: primaryColor }} className='w-full p-4 rounded-md'>Play ▶️</button></NavLink>
                         {questions?.map((question, i) => (
                             <article key={question.question} className={`flex flex-col justify-between border border-${darkMode ? "white" : "black"} p-4 rounded-xl shadow-xl `}>
 
                                 <span className='flex justify-between font-bold gap-2'>
                                     <h2 className='pb-4'>{convert(question.question)}</h2>
                                     <span className='w-4'>
-                                        {isFavorite(convert(question.question))
+                                        {isFavorite(convert(question.question + " :: " + question.answers.filter(ans=>ans.isCorrect)[0].answer))
                                             ? <FaStar color='gold'
-                                                onClick={() => { updateFavorites(convert(question.question)) }}
+                                                onClick={() => { updateFavorites(convert(question.question + " :: " + question.answers.filter(ans=>ans.isCorrect)[0].answer )) }}
                                             /> : <CiStar
-                                                onClick={() => { updateFavorites(convert(question.question)) }}
+                                                onClick={() => {
+                    
+                                                    console.log( question.answers.filter(ans=>ans.isCorrect)[0].answer );
+                                                    updateFavorites(convert(question.question + " :: " + question.answers.filter(ans=>ans.isCorrect)[0].answer )) }}
                                             />}
                                     </span>
                                 </span>
@@ -86,7 +90,7 @@ const Home = () => {
                         ))}
                     </div>
                 </section>
-                {favorites && favorites.map(favor => {
+                {/* {favorites && favorites.map(favor => {
         console.log(favor)
 
         return <div key={favor} className={`border border-${darkMode ? "white" : "black"} p-4 rounded-xl shadow-xl`}>
@@ -94,7 +98,7 @@ const Home = () => {
 
           <button onClick={() => removeFavorite(convert(favor))}>Remove from Favorites</button>
         </div>
-      })}
+      })} */}
 
             </main>
          

@@ -3,6 +3,13 @@
 @tailwind components;
 @tailwind utilities;
 
+
+:root{
+  --primary-color: rgb(208, 255, 0);
+
+}
+
+
 body {
   @apply bg-gray-100;
 }
@@ -10,5 +17,80 @@ body {
 
 .links:hover{
   background-color: attr(my-color);
-  /* color: attr(color); */
+}
+
+.link{
+  background-color: var(--primary-color);
+}
+
+
+.typing-effect {
+  font-size: 2rem;
+  font-family: monospace;
+  border-right: 2px solid rgba(255, 255, 255, 0.75);
+  white-space: nowrap;
+  overflow: hidden;
+  width: 0;
+  animation: typing 10s steps(40) infinite, border 1s infinite ease-in-out;
+}
+
+@keyframes border {
+  0% {
+     border-right-color: rgba(236, 224, 224, 0.75);
+
+  }
+
+  100% {
+     border-right-color: transparent ;
+
+  }
+}
+
+@keyframes typing {
+
+  0%,
+  100% {
+     width: 0;
+  }
+
+  50%,
+  90% {
+     width: 1000px;
+  }
+}
+
+.spinner {
+  border: 4px solid rgba(253, 147, 98, 0.1);
+  border-left-color: rgb(253, 147, 98);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin-full 1s linear infinite;
+}
+
+@keyframes spin-full {
+  to {
+     transform: rotate(360deg);
+  }
+}
+
+
+.mayonnaise-effect{
+  font-weight: 700;
+  animation: glow 1s infinite ease-in-out alternate;
+  color: #fff;
+}
+
+@keyframes glow {
+  0% {
+     text-shadow:
+        0 0 5px #ffffff4f, 0 0 10px #ffffff4f,
+        0 0 20px #ffab104f, 0 0 40px #ffab104f;
+  }
+
+  100% {
+     text-shadow:
+        0 0 5px #ffffffce, 0 0 10px #fff,
+        0 0 10px #ffb730, 0 0 40px #ffab10;
+  }
 }

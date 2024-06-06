@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import Layout from './layouts/Layout'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
 import { useTriviaStore } from './stores';
 
 
@@ -8,14 +8,23 @@ const App = () => {
   const darkMode = useTriviaStore(state => state.darkMode);
    const user = useTriviaStore(state=>state.user);
    const setUser = useTriviaStore(state=>state.setUser);
+   const setAnswers = useTriviaStore(state=>state.setAnswers);
+   const setCorrect_Answers = useTriviaStore(state=>state.setCorrect_Answers);
+   const navTo = useNavigate()
 
 
     // טעינה ראשונה
     useEffect(() => {
-      setUser({
-           name: "ahron",
-           score: 100
-      })
+      let name = localStorage.getItem('name') || prompt("Enter your name:");
+      setUser({name})
+      localStorage.setItem('name', name)
+      let correct_answers = localStorage.getItem('score')?.split('/')[0] || 0;
+      setCorrect_Answers(correct_answers)
+      let answers = localStorage.getItem('score')?.split('/')[1] || 0;
+      setAnswers(answers);
+      localStorage.setItem('score', `${correct_answers}/${answers}`)
+      navTo('/home')
+
   }, [])
 
 

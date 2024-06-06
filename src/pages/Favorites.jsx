@@ -1,10 +1,11 @@
 import React from 'react'
 import { useTriviaStore } from '../stores';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { FaStar } from 'react-icons/fa';
 
 
 const Favorites = () => {
-  const favorites = useTriviaStore(state => state.favorites2);
+  const favorites = useTriviaStore(state => state.favorites);
   const removeFavorite = useTriviaStore(state => state.removeFavorite);
   const primaryColor = useTriviaStore(state => state.primaryColor);
   const darkMode = useTriviaStore(state => state.darkMode);
@@ -24,15 +25,17 @@ const Favorites = () => {
 
   return (
     <div>
-      <NavLink to={"home"}><button style={{ backgroundColor: primaryColor }} className='w-full p-4 rounded-md' >Go home ➡️ </button></NavLink>
-      <NavLink to={"play"}><button style={{ backgroundColor: primaryColor }} className='w-full p-4 rounded-md'>Play ▶️</button></NavLink>
-      {favorites && favorites.map(favor => {
-        console.log(favor)
+      <span className='flex py-8 px-12 gap-2 font-semibold text-md'><h1 >Favorites </h1><FaStar s color='gold'/></span>
+      {favorites.map(favor => {
+        // console.log(favor)
 
-        return <div key={favor} className={`border border-${darkMode ? "white" : "black"} p-4 rounded-xl shadow-xl`}>
-          <h2>{favor}</h2>
+        return <div key={favor} className={`flex justify-between border border-${darkMode ? "white" : "black"} p-4 rounded-xl shadow-xl text-semibold`}>
+          <span className='flex'>
+            <p>{favor.split(" :: ")[0]}  ➡️ </p>  
+            <p className='text-green-600 font-semibold text-md'>{favor.split(" :: ")[1]}</p>  
+          </span>
 
-          <button onClick={() => removeFavorite(convert(favor))}>Remove from Favorites</button>
+          <button style={{ backgroundColor: primaryColor }} className='p-4 rounded-md' onClick={() => removeFavorite(convert(favor))}>Remove</button>
         </div>
       })}
 
