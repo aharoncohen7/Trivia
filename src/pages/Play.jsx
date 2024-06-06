@@ -95,7 +95,7 @@ const Play = () => {
                 :
                 <div className='flex justify-center items-center flex-col p-22'>
                     <h2 className='font-semibold text-xl p-20'>{`final score: ${correctCounter} from 9`}</h2>
-                    <span className='font-semibold text-xl p-20'>{`Success ratio so far: ${correct_answers}/${answers}`}</span>
+                    <span className='font-semibold text-xl p-20'>{`Success ratio so far: ${(answers/correct_answers).toFixed(1)*10 + "%"} (${correct_answers}/${answers})`}</span>
 
 
                     <button
